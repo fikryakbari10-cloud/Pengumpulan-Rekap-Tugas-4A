@@ -146,7 +146,13 @@
 
         <!-- Teacher Dashboard -->
         <div id="teacher-dashboard" class="w-full h-full hidden flex-col overflow-hidden">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan & Penilaian Tugas</h2>
+            <div class="flex justify-between items-center mb-4 flex-none flex-wrap gap-4">
+                <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan & Penilaian Tugas</h2>
+                <button id="btn-export-csv" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl shadow transition-colors flex items-center gap-2 text-sm">
+                    <i class="fas fa-file-excel text-lg"></i> Download Rekap Nilai (CSV)
+                </button>
+            </div>
+            
             <div id="teacher-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 flex-none overflow-y-auto pr-2 pb-4"></div>
 
             <div id="teacher-detail-view" class="hidden flex-grow flex-col bg-white rounded-2xl shadow-lg p-6 overflow-hidden border">
@@ -221,7 +227,6 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi Firebase Anda
         const appId = 'rekap-tugas-kelas-4a';
         const firebaseConfig = {
             apiKey: "AIzaSyAny5zUF_WL8YNSCB_cQ0yLTNqlBqMSLoI",
@@ -329,6 +334,7 @@
         const teacherDetailTitle = document.getElementById('teacher-detail-title');
         const teacherStudentList = document.getElementById('teacher-student-list');
         const btnCloseDetail = document.getElementById('btn-close-detail');
+        const btnExportCsv = document.getElementById('btn-export-csv');
 
         async function initApp() {
             populateStudentDropdown();
@@ -996,6 +1002,64 @@
             }
         };
 
+        function exportToCSV() {
+            let csvRows = [];
+            // Header kolom CSV
+            csvRows.push(['No', 'Nama Siswa', 'Mata Pelajaran', 'Judul Tugas', 'Tanggal Kirim', 'Nilai', 'Komentar Guru'].join(','));
+
+            let rowNumber = 1;
+            students.forEach(student => {
+                subjects.forEach(subject => {
+                    const tasks = database[student][subject.id];
+                    if (tasks.length > 0) {
+                        tasks.forEach(task => {
+                            const cleanStudent = `"${student.replace(/"/g, '""')}"`;
+                            const cleanSubject = `"${subject.name.replace(/"/g, '""')}"`;
+                            const cleanTitle = `"${task.title.replace(/"/g, '""')}"`;
+                            const cleanDate = `"${task.date.replace(/"/g, '""')}"`;
+                            const gradeVal = task.grade !== null ? task.grade : 'Belum Dinilai';
+                            const cleanComment = `"${(task.comment || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`;
+
+                            csvRows.push([
+                                rowNumber++,
+                                cleanStudent,
+                                cleanSubject,
+                                cleanTitle,
+                                cleanDate,
+                                gradeVal,
+                                cleanComment
+                            ].join(','));
+                        });
+                    } else {
+                        // Jika siswa belum mengumpulkan tugas sama sekali di mapel tersebut
+                        const cleanStudent = `"${student.replace(/"/g, '""')}"`;
+                        const cleanSubject = `"${subject.name.replace(/"/g, '""')}"`;
+                        csvRows.push([
+                            rowNumber++,
+                            cleanStudent,
+                            cleanSubject,
+                            '"Belum Mengumpulkan"',
+                            '"-"',
+                            '"-"',
+                            '"-"'
+                        ].join(','));
+                    }
+                });
+            });
+
+            const csvString = csvRows.join('\n');
+            // Tambahkan BOM (\uFEFF) agar teks terbaca dengan benar di Excel (UTF-8)
+            const blob = new Blob(["\uFEFF" + csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `Rekap_Nilai_Kelas_4A_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('Rekap nilai berhasil didownload!', 'bg-blue-600');
+        }
+
         function closeTeacherDetailView() {
             if (!teacherDetailView || !teacherSubjectGrid) return;
             teacherDetailView.classList.add('hidden');
@@ -1018,6 +1082,7 @@
                 });
             }
             if (btnCloseDetail) btnCloseDetail.addEventListener('click', closeTeacherDetailView);
+            if (btnExportCsv) btnExportCsv.addEventListener('click', exportToCSV);
 
             if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeDeleteModal);
             if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', executeDelete);
