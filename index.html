@@ -3,58 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekapan Tugas SD</title>
+    <title>Rekapan Tugas SD - Kelas 4A SDN Kuin Cerucuk 4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f3f4f6;
-        }
-
-        .subject-card {
-            transition: all 0.3s ease;
-        }
-        
-        .subject-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            transition: all 0.3s ease;
-        }
-
-        .upload-area.dragover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+        .subject-card { transition: all 0.3s ease; }
+        .subject-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s ease; }
+        .upload-area.dragover { border-color: #3b82f6; background-color: #eff6ff; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="text-gray-800 h-screen flex flex-col overflow-hidden">
 
+    <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 bg-gray-100 z-[100] flex items-center justify-center transition-opacity duration-300">
         <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-4 flex flex-col items-center text-center">
-            <img src="frLogo Sekolah .jpg" alt="Logo SDN Kuin Cerucuk 4" class="w-28 h-28 object-contain mb-3 drop-shadow-md rounded-full bg-white p-1" onerror="this.src='https://placehold.co/112x112/3b82f6/ffffff?text=SDN4'">
             <h2 class="text-2xl font-bold text-gray-800 mb-1">Selamat Datang!</h2>
             <h3 class="text-md font-semibold text-blue-600 mb-2">Kelas 4A - SDN Kuin Cerucuk 4 Banjarmasin</h3>
             <p class="text-gray-500 mb-6 text-sm">Silakan pilih nama kamu untuk masuk ke aplikasi.</p>
@@ -83,6 +52,7 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
     <div id="loading-overlay" class="fixed inset-0 bg-white/90 z-[150] flex flex-col items-center justify-center transition-opacity duration-300">
         <i class="fas fa-circle-notch fa-spin text-5xl text-blue-600 mb-4"></i>
         <p class="text-lg font-medium text-gray-700">Menghubungkan ke Cloud...</p>
@@ -91,7 +61,6 @@
     <nav class="bg-blue-600 text-white shadow-md p-4 flex-none z-10 relative">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <img src="frLogo Sekolah .jpg" alt="Logo Sekolah" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.src='https://placehold.co/48x48/ffffff/3b82f6?text=SD'">
                 <div class="flex flex-col">
                     <h1 class="text-xl md:text-2xl font-bold tracking-wide leading-tight">SDN Kuin Cerucuk 4</h1>
                     <span class="text-xs md:text-sm text-blue-200 font-medium">Buku TugasKu - Kelas 4A Banjarmasin</span>
@@ -116,18 +85,14 @@
     </nav>
 
     <main class="flex-grow container mx-auto p-4 flex flex-col lg:flex-row gap-6 overflow-hidden relative">
-        
-        <!-- Student Dashboard Wrapper -->
+        <!-- Student Dashboard -->
         <div id="student-dashboard" class="w-full flex flex-col lg:flex-row gap-6 h-full">
-            <!-- Left Column: Subject Selection -->
             <div class="lg:w-1/3 flex flex-col gap-4 overflow-y-auto pr-2 pb-4 h-full">
                 <h2 class="text-xl font-semibold mb-2 text-gray-700 border-b pb-2">Pilih Mata Pelajaran</h2>
                 <div id="subject-list" class="flex flex-col gap-3"></div>
             </div>
 
-            <!-- Right Column: Upload & History -->
             <div class="lg:w-2/3 bg-white rounded-2xl shadow-lg p-6 flex flex-col h-full overflow-hidden">
-                
                 <div id="upload-section" class="flex-none mb-6">
                     <div class="flex justify-between items-end mb-4 border-b pb-3">
                         <div>
@@ -138,11 +103,10 @@
 
                     <div id="task-details" class="mb-4 hidden">
                         <label for="task-title" class="block text-sm font-medium text-gray-700 mb-1">Judul Tugas <span class="text-red-500">*</span></label>
-                        <input type="text" id="task-title" placeholder="Contoh: Tugas 1, PR Halaman 12" class="w-full bg-white border border-gray-300 text-gray-800 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow" required>
+                        <input type="text" id="task-title" placeholder="Contoh: Tugas 1, PR Halaman 12" class="w-full bg-white border border-gray-300 text-gray-800 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                         <p class="text-xs text-red-500 mt-1 hidden" id="task-title-error">Judul tugas harus diisi.</p>
                     </div>
 
-                    <!-- Upload Area -->
                     <div id="drop-zone" class="upload-area bg-gray-50 rounded-xl p-8 text-center cursor-pointer relative overflow-hidden hidden mb-4 group">
                         <input type="file" id="file-input" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         <div class="flex flex-col items-center justify-center pointer-events-none group-hover:scale-105 transition-transform">
@@ -152,13 +116,11 @@
                         </div>
                     </div>
                     
-                    <!-- Please select subject prompt -->
                     <div id="select-prompt" class="bg-blue-50 border border-blue-100 rounded-xl p-8 text-center">
                         <i class="fas fa-hand-pointer text-4xl text-blue-300 mb-3 animate-bounce"></i>
                         <p class="text-blue-800 font-medium">Silakan pilih mata pelajaran di daftar sebelah kiri untuk mulai mengirim tugas.</p>
                     </div>
 
-                    <!-- Preview Area -->
                     <div id="preview-container" class="mt-4 hidden">
                         <h3 class="text-sm font-semibold text-gray-600 mb-2">Pratinjau Foto (<span id="preview-count">0</span>/10):</h3>
                         <div id="image-preview-grid" class="flex flex-wrap gap-3"></div>
@@ -172,7 +134,6 @@
 
                 <div class="flex-grow flex flex-col overflow-hidden border-t pt-4">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3"><i class="fas fa-history mr-2 text-gray-500"></i>Riwayat Tugas <span id="history-subject-name" class="text-blue-600"></span></h3>
-                    
                     <div id="history-list" class="flex-grow overflow-y-auto space-y-4 pr-2 pb-4">
                         <div id="empty-history" class="text-center py-10 text-gray-400 hidden">
                             <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
@@ -180,14 +141,12 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
 
         <!-- Teacher Dashboard -->
         <div id="teacher-dashboard" class="w-full h-full hidden flex-col overflow-hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan & Penilaian Tugas</h2>
-            
             <div id="teacher-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 flex-none overflow-y-auto pr-2 pb-4"></div>
 
             <div id="teacher-detail-view" class="hidden flex-grow flex-col bg-white rounded-2xl shadow-lg p-6 overflow-hidden border">
@@ -207,11 +166,13 @@
         </div>
     </main>
 
+    <!-- Modal Image -->
     <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <button id="close-modal" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300 focus:outline-none">&times;</button>
         <img id="modal-image" src="" alt="Full view" class="max-w-[95%] max-h-[95vh] object-contain rounded-md border border-gray-700 shadow-2xl">
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-4 right-4 transform translate-y-full opacity-0 transition-all duration-300 z-50">
         <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <i class="fas fa-check-circle text-xl"></i>
@@ -219,6 +180,7 @@
         </div>
     </div>
 
+    <!-- Teacher Password Modal -->
     <div id="teacher-password-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[110] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300" id="teacher-modal-content">
             <div class="text-center mb-4">
@@ -232,13 +194,12 @@
             <p id="teacher-pin-error" class="text-red-500 text-sm text-center mb-4 hidden">Kata sandi yang Anda masukkan salah!</p>
             <div class="flex gap-3 justify-center">
                 <button id="cancel-teacher-login" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors w-1/2">Batal</button>
-                <button id="confirm-teacher-login" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors w-1/2">
-                    Masuk
-                </button>
+                <button id="confirm-teacher-login" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors w-1/2">Masuk</button>
             </div>
         </div>
     </div>
 
+    <!-- Delete Modal -->
     <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[120] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300" id="delete-modal-content">
             <div class="text-center mb-4">
@@ -257,12 +218,19 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tugas-sd-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { projectId: 'demo-project' };
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // Konfigurasi Firebase Anda
+        const appId = 'rekap-tugas-kelas-4a';
+        const firebaseConfig = {
+            apiKey: "AIzaSyAny5zUF_WL8YNSCB_cQ0yLTNqlBqMSLoI",
+            authDomain: "rekap-tugas-kelas-4a.firebaseapp.com",
+            projectId: "rekap-tugas-kelas-4a",
+            storageBucket: "rekap-tugas-kelas-4a.firebasestorage.app",
+            messagingSenderId: "602940827687",
+            appId: "1:602940827687:web:05d526f4285615fa174602"
+        };
 
         let app, auth, db;
         try {
@@ -292,13 +260,13 @@
 
         let currentStudent = null;
         let currentSubject = null;
-        let selectedFiles = []; 
+        let selectedFiles = [];
         let assignmentToDelete = null; 
         let isTeacherMode = false;
-        let currentTeacherSubject = null; 
+        let currentTeacherSubject = null;
         const MAX_FILES = 10;
         const TEACHER_PASSWORD = 'fikry567'; 
-        let database = {}; 
+        let database = {};
 
         function initializeLocalDatabase() {
             database = {};
@@ -367,11 +335,7 @@
             setupEventListeners();
             
             try {
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                await signInAnonymously(auth);
                 startFirestoreSync();
             } catch (error) {
                 console.error("Gagal terhubung ke Cloud:", error);
@@ -379,19 +343,18 @@
                     loadingOverlay.innerHTML = `
                         <i class="fas fa-exclamation-triangle text-5xl text-red-500 mb-4"></i>
                         <p class="text-lg font-medium text-gray-700">Koneksi Database Gagal</p>
-                        <p class="text-sm text-gray-500 mt-2">Muat ulang halaman atau hubungi admin.</p>
+                        <p class="text-sm text-gray-500 mt-2">Pastikan Anonymous Authentication & Firestore sudah diaktifkan di Firebase Console.</p>
                     `;
                 }
             }
         }
 
-        let unsubscribeFirestore = null;
         function startFirestoreSync() {
             if (!db || !auth.currentUser) return;
             
             const tasksRef = collection(db, 'artifacts', appId, 'public', 'data', 'assignments');
             
-            unsubscribeFirestore = onSnapshot(tasksRef, (snapshot) => {
+            onSnapshot(tasksRef, (snapshot) => {
                 initializeLocalDatabase();
                 
                 snapshot.forEach(docSnap => {
@@ -430,9 +393,7 @@
 
                 if (loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
                     loadingOverlay.classList.add('opacity-0');
-                    setTimeout(() => {
-                        if (loadingOverlay) loadingOverlay.classList.add('hidden');
-                    }, 300);
+                    setTimeout(() => loadingOverlay.classList.add('hidden'), 300);
                 }
             }, (error) => {
                 console.error("Sinkronisasi gagal:", error);
@@ -491,7 +452,6 @@
                 const clickableClasses = isClickable ? 'cursor-pointer hover:bg-gray-50' : 'opacity-50 cursor-not-allowed';
                 
                 card.className = `${baseClasses} ${activeClasses} ${clickableClasses}`;
-                
                 if (isClickable) {
                     card.onclick = () => selectSubject(subject.id);
                 }
@@ -674,7 +634,7 @@
         }
 
         async function submitAssignment() {
-            if (selectedFiles.length === 0 || !currentSubject || !auth.currentUser || !taskTitleInput) return;
+            if (selectedFiles.length === 0 || !currentSubject || !auth.currentUser || !taskTitleInput || !btnSubmit) return;
 
             const title = taskTitleInput.value.trim();
             if (!title) {
@@ -684,10 +644,8 @@
                 return;
             }
 
-            if (btnSubmit) {
-                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-                btnSubmit.disabled = true;
-            }
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            btnSubmit.disabled = true;
 
             try {
                 const compressedImages = [];
@@ -696,7 +654,7 @@
                     compressedImages.push(base64Data);
                 }
 
-                if (btnSubmit) btnSubmit.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Menyimpan ke Cloud...';
+                btnSubmit.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Menyimpan...';
 
                 const tasksRef = collection(db, 'artifacts', appId, 'public', 'data', 'assignments');
                 await addDoc(tasksRef, {
@@ -707,7 +665,8 @@
                     timestamp: Date.now(),
                     images: compressedImages,
                     status: 'Terkirim',
-                    grade: null
+                    grade: null,
+                    comment: ''
                 });
 
                 showToast(`Tugas ${currentStudent} berhasil dikirim ke Cloud!`);
@@ -718,10 +677,8 @@
                 console.error("Gagal mengirim:", error);
                 showToast("Gagal menyimpan tugas. Coba lagi.", "bg-red-500");
             } finally {
-                if (btnSubmit) {
-                    btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Tugas';
-                    if (selectedFiles.length > 0) btnSubmit.disabled = false;
-                }
+                btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Tugas';
+                if(selectedFiles.length > 0) btnSubmit.disabled = false;
             }
         }
 
@@ -738,8 +695,8 @@
 
             if (history.length === 0) {
                 emptyHistoryEl.classList.remove('hidden');
-                const pEl = emptyHistoryEl.querySelector('p');
-                if (pEl) pEl.textContent = 'Belum ada tugas yang dikumpulkan untuk mapel ini.';
+                const p = emptyHistoryEl.querySelector('p');
+                if (p) p.textContent = 'Belum ada tugas yang dikumpulkan untuk mapel ini.';
                 return;
             }
 
@@ -751,7 +708,7 @@
                 
                 let imagesHtml = '';
                 item.images.forEach(imgUrl => {
-                    imagesHtml += `<img src="${imgUrl}" class="w-16 h-16 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity" onclick="window.openImageModal('${imgUrl}')" alt="Tugas">`;
+                    imagesHtml += `<img src="${imgUrl}" class="w-16 h-16 object-cover rounded border cursor-pointer hover:opacity-85 transition-opacity" onclick="window.openImageModal('${imgUrl}')" alt="Tugas">`;
                 });
 
                 let statusBadge = item.grade !== null 
@@ -787,29 +744,26 @@
 
         window.promptDelete = (assignmentId) => {
             assignmentToDelete = assignmentId;
-            if (deleteModal && deleteModalContent) {
-                deleteModal.classList.remove('hidden');
-                setTimeout(() => {
-                    deleteModal.classList.remove('opacity-0');
-                    deleteModalContent.classList.remove('scale-95');
-                }, 10);
-            }
+            if (!deleteModal || !deleteModalContent) return;
+            deleteModal.classList.remove('hidden');
+            setTimeout(() => {
+                deleteModal.classList.remove('opacity-0');
+                deleteModalContent.classList.remove('scale-95');
+            }, 10);
         };
 
         function closeDeleteModal() {
-            if (deleteModal && deleteModalContent) {
-                deleteModal.classList.add('opacity-0');
-                deleteModalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    deleteModal.classList.add('hidden');
-                    assignmentToDelete = null;
-                }, 300);
-            }
+            if (!deleteModal || !deleteModalContent) return;
+            deleteModal.classList.add('opacity-0');
+            deleteModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+                assignmentToDelete = null;
+            }, 300);
         }
 
         async function executeDelete() {
             if (!assignmentToDelete || !auth.currentUser) return;
-            
             try {
                 const taskRef = doc(db, 'artifacts', appId, 'public', 'data', 'assignments', assignmentToDelete);
                 await deleteDoc(taskRef);
@@ -825,8 +779,7 @@
             if (!toast) return;
             const msgEl = toast.querySelector('#toast-message');
             if (msgEl) msgEl.textContent = message;
-            const innerDiv = toast.firstElementChild;
-            if (innerDiv) innerDiv.className = `text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${bgColorClass}`;
+            toast.firstElementChild.className = `text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${bgColorClass}`;
             toast.classList.remove('translate-y-full', 'opacity-0');
             setTimeout(() => {
                 toast.classList.add('translate-y-full', 'opacity-0');
@@ -834,39 +787,35 @@
         }
 
         window.openImageModal = (imgSrc) => {
-            if (modalImg && modal) {
-                modalImg.src = imgSrc;
-                modal.classList.remove('hidden');
-                setTimeout(() => modal.classList.remove('opacity-0'), 10);
-            }
+            if (!modal || !modalImg) return;
+            modalImg.src = imgSrc;
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
         };
 
         function closeImageModal() {
-            if (modal) {
-                modal.classList.add('opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            }
+            if (!modal) return;
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
         function openTeacherModal() {
-            if (teacherPasswordModal && teacherModalContent && teacherPinInput && teacherPinError) {
-                teacherPasswordModal.classList.remove('hidden');
-                teacherPinInput.value = '';
-                teacherPinError.classList.add('hidden');
-                setTimeout(() => {
-                    teacherPasswordModal.classList.remove('opacity-0');
-                    teacherModalContent.classList.remove('scale-95');
-                    teacherPinInput.focus();
-                }, 10);
-            }
+            if (!teacherPasswordModal || !teacherModalContent || !teacherPinInput || !teacherPinError) return;
+            teacherPasswordModal.classList.remove('hidden');
+            teacherPinInput.value = '';
+            teacherPinError.classList.add('hidden');
+            setTimeout(() => {
+                teacherPasswordModal.classList.remove('opacity-0');
+                teacherModalContent.classList.remove('scale-95');
+                teacherPinInput.focus();
+            }, 10);
         }
 
         function closeTeacherModal() {
-            if (teacherPasswordModal && teacherModalContent) {
-                teacherPasswordModal.classList.add('opacity-0');
-                teacherModalContent.classList.add('scale-95');
-                setTimeout(() => teacherPasswordModal.classList.add('hidden'), 300);
-            }
+            if (!teacherPasswordModal || !teacherModalContent) return;
+            teacherPasswordModal.classList.add('opacity-0');
+            teacherModalContent.classList.add('scale-95');
+            setTimeout(() => teacherPasswordModal.classList.add('hidden'), 300);
         }
 
         function handleTeacherAuth() {
@@ -935,9 +884,7 @@
                     </div>
                     
                     <div class="w-full bg-gray-100 rounded-full h-3 mb-2 overflow-hidden shadow-inner">
-                        <div class="bg-blue-500 h-3 rounded-full transition-all duration-1000 relative" style="width: ${percentage}%">
-                             ${percentage > 20 ? `<div class="absolute inset-0 bg-white/20 animate-pulse"></div>` : ''}
-                        </div>
+                        <div class="bg-blue-500 h-3 rounded-full transition-all duration-1000 relative" style="width: ${percentage}%"></div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-500 font-medium">Progress Kelas</span>
@@ -994,7 +941,7 @@
                                             <i class="fas fa-check-double text-blue-500"></i> Penilaian:
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <input type="number" id="grade-input-${task.id}" value="${task.grade || ''}" min="0" max="100" placeholder="Nilai (0-100)" class="w-24 px-3 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-bold text-center shadow-inner text-blue-700">
+                                            <input type="number" id="grade-input-${task.id}" value="${task.grade || ''}" min="0" max="100" placeholder="Nilai (0-100)" class="w-24 px-3 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-bold text-center shadow-inner text-blue-700">
                                         </div>
                                     </div>
                                     <textarea id="comment-input-${task.id}" placeholder="Tulis komentar/catatan untuk siswa di sini..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" rows="2">${task.comment || ''}</textarea>
@@ -1050,13 +997,12 @@
         };
 
         function closeTeacherDetailView() {
-            if (teacherDetailView && teacherSubjectGrid) {
-                teacherDetailView.classList.add('hidden');
-                teacherDetailView.classList.remove('flex');
-                teacherSubjectGrid.classList.remove('hidden');
-                currentTeacherSubject = null;
-                renderTeacherDashboard(); 
-            }
+            if (!teacherDetailView || !teacherSubjectGrid) return;
+            teacherDetailView.classList.add('hidden');
+            teacherDetailView.classList.remove('flex');
+            teacherSubjectGrid.classList.remove('hidden');
+            currentTeacherSubject = null;
+            renderTeacherDashboard(); 
         }
 
         function setupEventListeners() {
