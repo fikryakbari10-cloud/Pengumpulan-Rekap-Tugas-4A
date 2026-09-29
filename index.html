@@ -26,7 +26,7 @@
         .chat-bubble-siswa { background-color: #f3f4f6; border-radius: 12px 12px 0 12px; border: 1px solid #e5e7eb; }
     </style>
 </head>
-<body class="text-gray-800 h-screen flex flex-col overflow-hidden bg-gray-50">
+<body class="text-gray-800 min-h-screen flex flex-col bg-gray-50">
 
     <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 bg-gray-50 z-[100] flex items-center justify-center transition-opacity duration-300 p-4">
@@ -91,17 +91,17 @@
         </div>
     </nav>
 
-    <main class="flex-grow container mx-auto p-2 md:p-4 flex flex-col lg:flex-row gap-3 md:gap-6 overflow-hidden relative">
+    <main class="flex-grow container mx-auto p-2 md:p-4 flex flex-col lg:flex-row gap-3 md:gap-6 relative">
         
         <!-- Student Dashboard -->
-        <div id="student-dashboard" class="w-full flex flex-col lg:flex-row gap-2 md:gap-6 h-full">
+        <div id="student-dashboard" class="w-full flex flex-col lg:flex-row gap-2 md:gap-6">
             
-            <div class="lg:w-1/3 flex flex-col gap-2 flex-none lg:h-full lg:overflow-y-auto lg:pr-2 z-10">
+            <div class="lg:w-1/3 flex flex-col gap-2 flex-none lg:pr-2 z-10">
                 <h2 class="text-sm md:text-xl font-semibold text-gray-600 lg:text-gray-700 lg:border-b lg:pb-2 px-2 hidden lg:block">Pilih Mata Pelajaran</h2>
                 <div id="subject-list" class="flex flex-row lg:flex-col gap-2 md:gap-3 overflow-x-auto lg:overflow-visible hide-scrollbar pb-2 snap-x snap-mandatory scroll-smooth px-1 lg:px-0"></div>
             </div>
 
-            <div class="lg:w-2/3 bg-white rounded-t-3xl lg:rounded-2xl shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.08)] lg:shadow-lg p-4 md:p-6 flex flex-col flex-grow overflow-y-auto lg:overflow-hidden z-20">
+            <div class="lg:w-2/3 bg-white rounded-t-3xl lg:rounded-2xl shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.08)] lg:shadow-lg p-4 md:p-6 flex flex-col flex-grow z-20">
                 
                 <div id="upload-section" class="flex-none mb-4 md:mb-6">
                     <div class="flex justify-between items-end mb-3 md:mb-4 border-b pb-2 md:pb-3">
@@ -142,9 +142,9 @@
                     </div>
                 </div>
 
-                <div class="flex-grow flex flex-col overflow-visible lg:overflow-hidden border-t pt-4">
-                    <h3 class="text-base md:text-lg font-semibold text-gray-700 mb-3 sticky top-0 bg-white z-10 py-1"><i class="fas fa-history mr-2 text-blue-500"></i>Riwayat & Diskusi <span id="history-subject-name" class="text-blue-600 text-sm md:text-base"></span></h3>
-                    <div id="history-list" class="flex-grow overflow-visible lg:overflow-y-auto space-y-4 pr-1 md:pr-2 pb-20 md:pb-4">
+                <div class="flex-grow flex flex-col border-t pt-4">
+                    <h3 class="text-base md:text-lg font-semibold text-gray-700 mb-3 py-1"><i class="fas fa-history mr-2 text-blue-500"></i>Riwayat & Diskusi <span id="history-subject-name" class="text-blue-600 text-sm md:text-base"></span></h3>
+                    <div id="history-list" class="flex-grow space-y-4 pr-1 md:pr-2 pb-20 md:pb-4">
                         <div id="empty-history" class="text-center py-10 text-gray-400 hidden bg-gray-50 rounded-xl border border-dashed border-gray-200">
                             <i class="fas fa-folder-open text-3xl md:text-4xl mb-2 opacity-50"></i>
                             <p class="text-xs md:text-sm px-4">Belum ada tugas yang dikumpulkan untuk mapel ini.</p>
@@ -155,7 +155,7 @@
         </div>
 
         <!-- Teacher Dashboard -->
-        <div id="teacher-dashboard" class="w-full h-full hidden flex-col overflow-hidden">
+        <div id="teacher-dashboard" class="w-full hidden flex-col">
             <div class="flex justify-between items-center mb-3 md:mb-4 flex-none flex-wrap gap-2 md:gap-4 px-1">
                 <h2 class="text-xl md:text-2xl font-bold text-gray-800"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan Tugas</h2>
                 <button id="btn-export-csv" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 md:py-2.5 px-4 md:px-5 rounded-xl shadow transition-colors flex items-center gap-2 text-xs md:text-sm w-full md:w-auto justify-center">
@@ -163,9 +163,9 @@
                 </button>
             </div>
             
-            <div id="teacher-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-2 md:mb-6 flex-none overflow-y-auto pr-1 md:pr-2 pb-2 md:pb-4 hide-scrollbar"></div>
+            <div id="teacher-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-6"></div>
 
-            <div id="teacher-detail-view" class="hidden flex-grow flex-col bg-white rounded-2xl shadow-lg p-3 md:p-6 overflow-hidden border">
+            <div id="teacher-detail-view" class="hidden flex-col bg-white rounded-2xl shadow-lg p-3 md:p-6 border">
                 <div class="flex justify-between items-center mb-3 md:mb-4 border-b pb-2 md:pb-3 flex-none">
                     <div>
                         <h3 id="teacher-detail-title" class="text-lg md:text-xl font-bold text-blue-600">Detail Mapel</h3>
@@ -175,7 +175,7 @@
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                <div class="flex-grow overflow-y-auto pr-1 md:pr-2 hide-scrollbar">
+                <div class="w-full">
                     <div id="teacher-student-list" class="space-y-3 pb-8"></div>
                 </div>
             </div>
