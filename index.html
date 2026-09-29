@@ -38,7 +38,7 @@
             
             <h2 class="text-2xl font-bold text-gray-800 mb-1">Selamat Datang!</h2>
             <h3 class="text-sm font-semibold text-blue-600 mb-1">Kelas 4A - SDN Kuin Cerucuk 4</h3>
-            <p class="text-xs text-gray-400 mb-4 font-medium">Guru Pengampu: Fikry Akbari</p>
+            <p class="text-xs text-gray-400 mb-4 font-medium">Guru Kelas: Fikry Akbari</p>
             <p class="text-gray-500 mb-6 text-xs md:text-sm">Silakan pilih nama kamu untuk masuk.</p>
             
             <div class="w-full mb-6 relative text-left">
@@ -78,7 +78,7 @@
                 <img src="frLogo Sekolah .jpg" alt="Logo Sekolah" class="w-10 h-10 md:w-12 md:h-12 object-contain bg-white rounded-full p-0.5 shadow-sm border border-blue-400">
                 <div class="flex flex-col">
                     <h1 class="text-lg md:text-2xl font-bold tracking-wide leading-tight">SDN Kuin Cerucuk 4</h1>
-                    <span class="text-[10px] md:text-sm text-blue-200 font-medium">Buku TugasKu • Guru: Fikry Akbari</span>
+                    <span class="text-[10px] md:text-sm text-blue-200 font-medium">Buku TugasKu • Guru Kelas: Fikry Akbari</span>
                 </div>
             </div>
             
@@ -163,7 +163,7 @@
             <div class="flex justify-between items-center mb-3 md:mb-4 flex-none flex-wrap gap-2 md:gap-4 px-1">
                 <div>
                     <h2 class="text-xl md:text-2xl font-bold text-gray-800"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan Tugas</h2>
-                    <p class="text-xs text-gray-500 mt-0.5">Guru Pengampu: <strong class="text-blue-600">Fikry Akbari</strong></p>
+                    <p class="text-xs text-gray-500 mt-0.5">Guru Kelas: <strong class="text-blue-600">Fikry Akbari</strong></p>
                 </div>
                 <button id="btn-export-csv" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 md:py-2.5 px-4 md:px-5 rounded-xl shadow transition-colors flex items-center gap-2 text-xs md:text-sm w-full md:w-auto justify-center">
                     <i class="fas fa-file-excel text-base md:text-lg"></i> Download Rekap (CSV)
@@ -210,7 +210,7 @@
                 <div class="w-16 h-16 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto mb-3">
                     <i class="fas fa-lock text-3xl text-indigo-600"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-1">Akses Guru</h3>
+                <h3 class="text-xl font-bold text-gray-800 mb-1">Akses Guru Kelas</h3>
                 <p class="text-gray-500 text-xs md:text-sm">Masukkan PIN atau Kata Sandi</p>
             </div>
             <input type="password" id="teacher-pin" class="w-full bg-gray-50 border border-gray-300 text-gray-800 py-3.5 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-center tracking-widest text-xl font-bold transition-all" placeholder="••••••••">
@@ -1179,7 +1179,7 @@
                     setTimeout(() => loginScreen.classList.add('hidden'), 300);
                 }
                 
-                if (displayStudentName) displayStudentName.textContent = "Fikry Akbari (Guru)";
+                if (displayStudentName) displayStudentName.textContent = "Fikry Akbari (Guru Kelas)";
                 if (userProfile) {
                     userProfile.classList.remove('hidden');
                     userProfile.classList.add('flex');
@@ -1195,7 +1195,7 @@
                 }
 
                 renderTeacherDashboard();
-                showToast('Masuk sebagai Fikry Akbari (Guru)');
+                showToast('Masuk sebagai Fikry Akbari (Guru Kelas)');
             } else {
                 teacherPinError.classList.remove('hidden');
             }
