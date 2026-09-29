@@ -238,9 +238,9 @@
         import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
-        // GANTI DENGAN KUNCI API KLASIK BERFORMAT "AIzaSy..." JIKA KUNCI "AQ..." GAGAL
+        // KUNCI API GEMINI ANDA
         // =========================================================================
-        const GEMINI_API_KEY = 'AQ.Ab8RN6I-ADN8RWg3NSxum7NaZBIPTij7VNxHUCONcrc3bEzSLw'; 
+        const GEMINI_API_KEY = 'AQ.Ab8RN6I3cvSq5DKIBVKqMGRKEUV9w0891BA9XJkFVjLQs9wfKQ'; 
 
         const appId = 'rekap-tugas-kelas-4a';
         const firebaseConfig = {
@@ -814,7 +814,7 @@
             }
         };
 
-        // Fungsi Pemanggilan AI yang mendukung format kunci API Klasik & Cloud
+        // Fungsi AI disesuaikan dengan nama guru Fikry Akbari
         window.generateAIComment = async (studentName, subjectName, taskId) => {
             const gradeInput = document.getElementById(`grade-input-${taskId}`);
             const chatInput = document.getElementById(`chat-input-guru-${taskId}`);
@@ -832,9 +832,8 @@
                 btnAI.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
                 btnAI.disabled = true;
 
-                const prompt = `Bertindaklah sebagai Pak Fikry, guru SD kelas 4. Beri draf SATU kalimat pujian evaluasi untuk ${studentName} pada mapel ${subjectName} dengan nilai ${grade}/100. Pakai bahasa ramah.`;
+                const prompt = `Bertindaklah sebagai Pak Fikry Akbari, guru SD kelas 4 di SDN Kuin Cerucuk 4. Beri draf SATU kalimat pujian evaluasi yang ramah dan memotivasi untuk ${studentName} pada mapel ${subjectName} dengan nilai ${grade}/100.`;
 
-                // Mendukung endpoint standar jika menggunakan kunci AIza atau format Bearer
                 const isBearer = GEMINI_API_KEY.startsWith('AQ.');
                 const url = isBearer 
                     ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`
