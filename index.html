@@ -27,14 +27,17 @@
         
         .chat-bubble-guru { background-color: #e0f2fe; border-radius: 12px 12px 12px 0; border: 1px solid #bae6fd; }
         .chat-bubble-siswa { background-color: #f3f4f6; border-radius: 12px 12px 0 12px; border: 1px solid #e5e7eb; }
+        
+        .notif-item { transition: background-color 0.2s; }
+        .notif-unread { background-color: #eff6ff; }
     </style>
 </head>
-<body class="text-gray-800 min-h-screen flex flex-col bg-gray-50">
+<body class="text-gray-800 min-h-screen flex flex-col bg-gray-50 relative">
 
     <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 bg-gray-50 z-[100] flex items-center justify-center transition-opacity duration-300 p-4">
         <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl max-w-md w-full flex flex-col items-center text-center border border-gray-100">
-            <img src="frLogo Sekolah .jpg" alt="Logo SDN Kuin Cerucuk 4" class="w-24 h-24 object-contain mb-4 drop-shadow-md bg-white rounded-full p-1 border-2 border-gray-100">
+            <img src="frLogo Sekolah .jpg" alt="Logo SDN Kuin Cerucuk 4" class="w-24 h-24 object-contain mb-4 drop-shadow-md bg-white rounded-full p-1 border-2 border-gray-100" onerror="this.src='https://placehold.co/100x100/ffffff/3b82f6?text=SDN'">
             
             <h2 class="text-2xl font-bold text-gray-800 mb-1">Selamat Datang!</h2>
             <h3 class="text-sm font-semibold text-blue-600 mb-1">Kelas 4A - SDN Kuin Cerucuk 4</h3>
@@ -72,17 +75,38 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="bg-blue-600 text-white shadow-md p-3 md:p-4 flex-none z-10 relative">
+    <nav class="bg-blue-600 text-white shadow-md p-3 md:p-4 flex-none z-30 relative">
         <div class="container mx-auto flex justify-between items-center gap-2 md:gap-4">
             <div class="flex items-center gap-2 md:gap-3">
-                <img src="frLogo Sekolah .jpg" alt="Logo Sekolah" class="w-10 h-10 md:w-12 md:h-12 object-contain bg-white rounded-full p-0.5 shadow-sm border border-blue-400">
+                <img src="frLogo Sekolah .jpg" alt="Logo" class="w-10 h-10 md:w-12 md:h-12 object-contain bg-white rounded-full p-0.5 shadow-sm border border-blue-400" onerror="this.src='https://placehold.co/100x100/ffffff/3b82f6?text=SDN'">
                 <div class="flex flex-col">
                     <h1 class="text-lg md:text-2xl font-bold tracking-wide leading-tight">SDN Kuin Cerucuk 4</h1>
-                    <span class="text-[10px] md:text-sm text-blue-200 font-medium">Buku TugasKu • Guru Kelas: Fikry Akbari</span>
+                    <span class="text-[10px] md:text-sm text-blue-200 font-medium">Buku TugasKu • Guru: Fikry Akbari</span>
                 </div>
             </div>
             
-            <div id="user-profile" class="hidden items-center gap-2 md:gap-4 bg-blue-700/50 py-1.5 px-3 md:px-4 rounded-full max-w-[50%] md:max-w-none">
+            <div id="user-profile" class="hidden items-center gap-2 md:gap-4 bg-blue-700/50 py-1.5 px-3 md:px-4 rounded-full max-w-[50%] md:max-w-none relative">
+                
+                <!-- Notification Bell -->
+                <div class="relative flex items-center justify-center border-r border-blue-400/50 pr-2 md:pr-4">
+                    <button id="btn-notifications" class="text-blue-100 hover:text-white transition-colors relative p-1 rounded-full hover:bg-blue-600" title="Notifikasi">
+                        <i class="fas fa-bell text-lg md:text-xl"></i>
+                        <span id="notif-badge" class="absolute top-0 right-0 bg-red-500 border border-white text-white text-[9px] md:text-[10px] font-bold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full hidden scale-0 transition-transform">0</span>
+                    </button>
+                    
+                    <!-- Notification Panel -->
+                    <div id="notif-panel" class="hidden absolute top-full right-0 mt-3 w-72 md:w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col max-h-[70vh]">
+                        <div class="p-3 bg-gray-50 border-b flex justify-between items-center text-gray-800">
+                            <h4 class="font-bold text-sm"><i class="fas fa-bell text-blue-500 mr-1.5"></i>Notifikasi</h4>
+                            <button id="btn-read-all" class="text-[10px] md:text-xs text-blue-600 font-medium hover:underline px-2 py-1 bg-blue-50 rounded-md transition-colors hidden">Tandai Dibaca</button>
+                        </div>
+                        <div id="notif-list" class="overflow-y-auto flex-grow custom-scroll bg-white">
+                            <!-- Items injected via JS -->
+                            <div class="p-6 text-center text-gray-400 text-xs italic"><i class="fas fa-check-double text-2xl mb-2 opacity-30 block"></i>Belum ada notifikasi.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-1.5 md:gap-2 overflow-hidden">
                     <i class="fas fa-user-circle text-lg md:text-2xl text-blue-200 flex-shrink-0"></i>
                     <span id="display-student-name" class="font-medium text-xs md:text-base truncate">Nama Siswa</span>
@@ -95,7 +119,7 @@
         </div>
     </nav>
 
-    <main class="flex-grow container mx-auto p-2 md:p-4 flex flex-col lg:flex-row gap-3 md:gap-6 relative">
+    <main class="flex-grow container mx-auto p-2 md:p-4 flex flex-col lg:flex-row gap-3 md:gap-6 relative z-10" id="main-content">
         
         <!-- Student Dashboard -->
         <div id="student-dashboard" class="w-full flex flex-col lg:flex-row gap-2 md:gap-6">
@@ -105,7 +129,7 @@
                 <div id="subject-list" class="flex flex-row lg:flex-col gap-2 md:gap-3 overflow-x-auto lg:overflow-visible hide-scrollbar pb-2 snap-x snap-mandatory scroll-smooth px-1 lg:px-0"></div>
             </div>
 
-            <div class="lg:w-2/3 bg-white rounded-t-3xl lg:rounded-2xl shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.08)] lg:shadow-lg p-4 md:p-6 flex flex-col flex-grow z-20">
+            <div class="lg:w-2/3 bg-white rounded-t-3xl lg:rounded-2xl shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.08)] lg:shadow-lg p-4 md:p-6 flex flex-col flex-grow z-20 relative">
                 
                 <div id="upload-section" class="flex-none mb-4 md:mb-6">
                     <div class="flex justify-between items-end mb-3 md:mb-4 border-b pb-2 md:pb-3">
@@ -160,7 +184,7 @@
 
         <!-- Teacher Dashboard -->
         <div id="teacher-dashboard" class="w-full hidden flex-col">
-            <div class="flex justify-between items-center mb-3 md:mb-4 flex-none flex-wrap gap-2 md:gap-4 px-1">
+            <div class="flex justify-between items-center mb-4 flex-none flex-wrap gap-2 px-1">
                 <div>
                     <h2 class="text-xl md:text-2xl font-bold text-gray-800"><i class="fas fa-chart-pie text-blue-600 mr-2"></i>Pantauan Tugas</h2>
                     <p class="text-xs text-gray-500 mt-0.5">Guru Kelas: <strong class="text-blue-600">Fikry Akbari</strong></p>
@@ -169,11 +193,34 @@
                     <i class="fas fa-file-excel text-base md:text-lg"></i> Download Rekap (CSV)
                 </button>
             </div>
+
+            <!-- New Daily Recap Section -->
+            <div id="daily-recap-panel" class="bg-white p-4 md:p-5 rounded-2xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-blue-100 mb-6 hidden">
+                <h3 class="text-sm md:text-base font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex justify-between items-center">
+                    <span><i class="fas fa-calendar-day text-blue-500 mr-2"></i>Aktivitas Hari Ini</span>
+                    <span id="today-date-text" class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">Tanggal</span>
+                </h3>
+                <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+                    <div class="w-full lg:w-1/2">
+                        <h4 class="font-semibold text-green-600 text-xs md:text-sm mb-2 flex items-center bg-green-50 px-2 py-1 rounded"><i class="fas fa-check-circle mr-1.5"></i>Tugas Masuk Hari Ini</h4>
+                        <div id="today-submitted-list" class="space-y-2 max-h-56 overflow-y-auto custom-scroll pr-2">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-1/2 border-t lg:border-t-0 lg:border-l border-gray-100 pt-3 lg:pt-0 lg:pl-6">
+                        <h4 class="font-semibold text-red-500 text-xs md:text-sm mb-2 flex items-center bg-red-50 px-2 py-1 rounded"><i class="fas fa-times-circle mr-1.5"></i>Siswa Belum Mengumpul</h4>
+                        <div id="today-unsubmitted-list" class="flex flex-wrap gap-1.5 max-h-56 overflow-y-auto custom-scroll pr-2 content-start">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
             
+            <h3 class="text-sm font-bold text-gray-700 mb-2 px-1"><i class="fas fa-th-large text-gray-400 mr-1.5"></i>Semua Mata Pelajaran</h3>
             <div id="teacher-subject-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-6"></div>
 
-            <div id="teacher-detail-view" class="hidden flex-col bg-white rounded-2xl shadow-lg p-3 md:p-6 border">
-                <div class="flex justify-between items-center mb-3 md:mb-4 border-b pb-2 md:pb-3 flex-none">
+            <div id="teacher-detail-view" class="hidden flex-col bg-white rounded-2xl shadow-lg p-3 md:p-6 border relative">
+                <div class="flex justify-between items-center mb-3 md:mb-4 border-b pb-2 md:pb-3 flex-none sticky top-0 bg-white z-10 pt-2">
                     <div>
                         <h3 id="teacher-detail-title" class="text-lg md:text-xl font-bold text-blue-600">Detail Mapel</h3>
                         <p class="text-xs md:text-sm text-gray-500">Daftar pengumpulan & Penilaian</p>
@@ -198,8 +245,8 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-300 z-[300] w-11/12 max-w-sm pointer-events-none">
         <div class="bg-gray-900/90 backdrop-blur text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center justify-center gap-3 border border-gray-700">
-            <i class="fas fa-check-circle text-green-400 text-lg"></i>
-            <span id="toast-message" class="font-medium text-sm md:text-base text-center w-full">Sukses!</span>
+            <i class="fas fa-info-circle text-blue-400 text-lg"></i>
+            <span id="toast-message" class="font-medium text-sm md:text-base text-center w-full">Pesan</span>
         </div>
     </div>
 
@@ -242,7 +289,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc, arrayUnion, query, where, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
         // KUNCI API GEMINI ANDA
@@ -295,6 +342,9 @@
         const MAX_FILES = 10;
         const TEACHER_PASSWORD = 'fikry567'; 
         let database = {};
+        
+        let unsubscribeNotifs = null;
+        let currentNotifications = [];
 
         function initializeLocalDatabase() {
             database = {};
@@ -307,6 +357,7 @@
         }
         initializeLocalDatabase();
 
+        // DOM Elements
         const loadingOverlay = document.getElementById('loading-overlay');
         const loginScreen = document.getElementById('login-screen');
         const loginStudentSelect = document.getElementById('login-student-select');
@@ -315,6 +366,13 @@
         const displayStudentName = document.getElementById('display-student-name');
         const btnLogout = document.getElementById('btn-logout');
         
+        // Notifications DOM
+        const btnNotifications = document.getElementById('btn-notifications');
+        const notifPanel = document.getElementById('notif-panel');
+        const notifBadge = document.getElementById('notif-badge');
+        const notifList = document.getElementById('notif-list');
+        const btnReadAll = document.getElementById('btn-read-all');
+
         const subjectListEl = document.getElementById('subject-list');
         const currentSubjectTitleEl = document.getElementById('current-subject-title');
         const historySubjectNameEl = document.getElementById('history-subject-name');
@@ -358,6 +416,12 @@
         const teacherStudentList = document.getElementById('teacher-student-list');
         const btnCloseDetail = document.getElementById('btn-close-detail');
         const btnExportCsv = document.getElementById('btn-export-csv');
+        
+        // Daily Recap DOM
+        const dailyRecapPanel = document.getElementById('daily-recap-panel');
+        const todayDateText = document.getElementById('today-date-text');
+        const todaySubmittedList = document.getElementById('today-submitted-list');
+        const todayUnsubmittedList = document.getElementById('today-unsubmitted-list');
 
         async function initApp() {
             populateStudentDropdown();
@@ -409,6 +473,7 @@
                 });
 
                 if (isTeacherMode) {
+                    renderDailyRecap();
                     if (teacherDetailView && teacherDetailView.classList.contains('flex') && currentTeacherSubject) {
                         const subjectObj = subjects.find(s => s.id === currentTeacherSubject);
                         if (subjectObj) openTeacherDetailView(subjectObj);
@@ -428,6 +493,242 @@
                 console.error("Sinkronisasi gagal:", error);
             });
         }
+        
+        // --- Notification Logic ---
+        function startNotificationSync() {
+            if (unsubscribeNotifs) {
+                unsubscribeNotifs();
+                unsubscribeNotifs = null;
+            }
+            if (!auth.currentUser) return;
+
+            const recipientName = isTeacherMode ? 'Guru' : currentStudent;
+            if (!recipientName) return;
+
+            const notifRef = collection(db, 'artifacts', appId, 'public', 'data', 'notifications');
+            
+            // To keep simple for this setup, we fetch all notifications. 
+            // In a real app with many users, use a query: query(notifRef, where("recipient", "==", recipientName))
+            // But this requires composite indexes in Firestore sometimes. Let's filter client side for robustness here.
+            
+            unsubscribeNotifs = onSnapshot(notifRef, (snapshot) => {
+                let notifs = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.recipient === recipientName) {
+                        notifs.push({ id: docSnap.id, ...data });
+                    }
+                });
+                
+                notifs.sort((a, b) => b.timestamp - a.timestamp);
+                currentNotifications = notifs;
+                renderNotifications();
+            });
+        }
+        
+        async function sendNotification(recipient, type, message, taskId, subjectId, studentName = null) {
+            if (!db || !auth.currentUser) return;
+            try {
+                const notifRef = collection(db, 'artifacts', appId, 'public', 'data', 'notifications');
+                await addDoc(notifRef, {
+                    recipient: recipient,
+                    type: type, // 'submission', 'grade', 'comment'
+                    message: message,
+                    taskId: taskId,
+                    subjectId: subjectId,
+                    student: studentName,
+                    timestamp: Date.now(),
+                    isRead: false
+                });
+            } catch (error) {
+                console.error("Gagal mengirim notif:", error);
+            }
+        }
+        
+        function renderNotifications() {
+            if (!notifBadge || !notifList || !btnReadAll) return;
+            
+            const unreadCount = currentNotifications.filter(n => !n.isRead).length;
+            
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                notifBadge.classList.remove('hidden', 'scale-0');
+                notifBadge.classList.add('scale-100');
+                btnReadAll.classList.remove('hidden');
+            } else {
+                notifBadge.classList.add('scale-0');
+                setTimeout(() => notifBadge.classList.add('hidden'), 200);
+                btnReadAll.classList.add('hidden');
+            }
+            
+            notifList.innerHTML = '';
+            
+            if (currentNotifications.length === 0) {
+                notifList.innerHTML = '<div class="p-6 text-center text-gray-400 text-xs italic"><i class="fas fa-check-double text-2xl mb-2 opacity-30 block"></i>Belum ada notifikasi.</div>';
+                return;
+            }
+            
+            currentNotifications.slice(0, 50).forEach(notif => {
+                const isUnread = !notif.isRead;
+                const timeString = new Date(notif.timestamp).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                
+                let icon = 'fa-bell text-gray-400';
+                let iconBg = 'bg-gray-100';
+                if (notif.type === 'submission') { icon = 'fa-upload text-blue-500'; iconBg = 'bg-blue-100'; }
+                else if (notif.type === 'grade') { icon = 'fa-star text-yellow-500'; iconBg = 'bg-yellow-100'; }
+                else if (notif.type === 'comment') { icon = 'fa-comment-dots text-green-500'; iconBg = 'bg-green-100'; }
+                
+                const item = document.createElement('div');
+                item.className = `notif-item p-3 border-b border-gray-50 flex gap-3 cursor-pointer ${isUnread ? 'notif-unread border-l-4 border-l-blue-500' : 'hover:bg-gray-50 border-l-4 border-l-transparent'}`;
+                
+                // Action on click: Mark read and navigate
+                item.onclick = async () => {
+                    if (isUnread) {
+                        try {
+                            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'notifications', notif.id);
+                            await updateDoc(docRef, { isRead: true });
+                        } catch(e){}
+                    }
+                    notifPanel.classList.add('hidden');
+                    
+                    if (isTeacherMode && notif.subjectId && notif.student) {
+                        window.openTeacherDetailAndScroll(notif.subjectId, notif.student, notif.taskId);
+                    } else if (!isTeacherMode && notif.subjectId) {
+                        window.selectSubject(notif.subjectId);
+                        // Optional: highlight task
+                    }
+                };
+                
+                item.innerHTML = `
+                    <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${iconBg} mt-0.5">
+                        <i class="fas ${icon} text-xs"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-xs text-gray-800 ${isUnread ? 'font-semibold' : ''}">${notif.message}</p>
+                        <p class="text-[9px] text-gray-400 mt-1"><i class="far fa-clock mr-1"></i>${timeString}</p>
+                    </div>
+                `;
+                notifList.appendChild(item);
+            });
+        }
+        
+        async function markAllNotificationsRead() {
+            if (!db || currentNotifications.length === 0) return;
+            const unread = currentNotifications.filter(n => !n.isRead);
+            if (unread.length === 0) return;
+            
+            btnReadAll.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                // Since we don't have batch setup in imports initially, let's update individually for simplicity or use writeBatch
+                const batch = writeBatch(db);
+                unread.forEach(n => {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'notifications', n.id);
+                    batch.update(docRef, { isRead: true });
+                });
+                await batch.commit();
+                showToast('Semua notifikasi ditandai dibaca');
+            } catch (e) {
+                console.error("Error marking read", e);
+            } finally {
+                btnReadAll.innerHTML = 'Tandai Dibaca';
+            }
+        }
+        
+        // --- Daily Recap Logic ---
+        function renderDailyRecap() {
+            if (!isTeacherMode || !dailyRecapPanel || !todaySubmittedList || !todayUnsubmittedList) return;
+            
+            dailyRecapPanel.classList.remove('hidden');
+            
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            todayDateText.textContent = today.toLocaleDateString('id-ID', options);
+            
+            const startOfTodayMs = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+            
+            const submittedMap = new Map();
+            
+            students.forEach(student => {
+                subjects.forEach(sub => {
+                    const tasks = database[student][sub.id] || [];
+                    tasks.forEach(task => {
+                        if (task.timestamp >= startOfTodayMs) {
+                            if (!submittedMap.has(student)) submittedMap.set(student, []);
+                            submittedMap.get(student).push({ subject: sub, task: task });
+                        }
+                    });
+                });
+            });
+            
+            todaySubmittedList.innerHTML = '';
+            todayUnsubmittedList.innerHTML = '';
+            
+            // Render Submitted
+            if (submittedMap.size === 0) {
+                todaySubmittedList.innerHTML = '<div class="p-4 bg-gray-50 rounded-lg text-center text-xs text-gray-500 border border-dashed border-gray-200">Belum ada siswa yang mengumpulkan tugas hari ini.</div>';
+            } else {
+                for (const [student, tasks] of submittedMap.entries()) {
+                    let taskHtml = tasks.map(t => {
+                        const isGraded = t.task.grade !== null;
+                        return `
+                        <div class="flex items-center justify-between bg-gray-50 hover:bg-blue-50 p-1.5 rounded mt-1 border border-transparent hover:border-blue-100 transition-colors cursor-pointer group" onclick="window.openTeacherDetailAndScroll('${t.subject.id}', '${student}', '${t.task.id}')">
+                            <span class="text-[10px] md:text-xs text-gray-600 truncate mr-2 flex-grow"><i class="fas fa-caret-right text-gray-300 mr-1 group-hover:text-blue-400"></i>${t.subject.name}: ${t.task.title}</span>
+                            ${isGraded 
+                                ? `<span class="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Dinilai</span>`
+                                : `<span class="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold whitespace-nowrap animate-pulse">Baru</span>`}
+                        </div>`;
+                    }).join('');
+                    
+                    todaySubmittedList.innerHTML += `
+                        <div class="border border-green-100 rounded-xl p-2 bg-white shadow-sm mb-2">
+                            <div class="font-bold text-xs md:text-sm text-gray-800 flex items-center mb-1"><div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>${student}</div>
+                            <div class="space-y-0.5 pl-4">${taskHtml}</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Render Unsubmitted
+            let unsubmittedCount = 0;
+            students.forEach(student => {
+                if (!submittedMap.has(student)) {
+                    unsubmittedCount++;
+                    todayUnsubmittedList.innerHTML += `<span class="bg-white border border-red-100 text-gray-600 px-2 py-1 rounded-md text-[10px] md:text-xs shadow-sm hover:bg-red-50 cursor-default transition-colors">${student}</span>`;
+                }
+            });
+            
+            if (unsubmittedCount === 0) {
+                todayUnsubmittedList.innerHTML = '<div class="w-full p-4 bg-green-50 rounded-lg text-center text-xs text-green-600 font-medium border border-green-100"><i class="fas fa-check-circle mr-1 block text-2xl mb-1 opacity-50"></i>Luar biasa! Semua siswa sudah mengumpulkan tugas hari ini.</div>';
+            }
+        }
+        
+        window.openTeacherDetailAndScroll = (subjectId, studentName, taskId = null) => {
+            const subject = subjects.find(s => s.id === subjectId);
+            if (subject) {
+                currentTeacherSubject = subjectId;
+                openTeacherDetailView(subject);
+                
+                // Small delay to allow DOM to render
+                setTimeout(() => {
+                    const studentElements = teacherStudentList.querySelectorAll('.student-row');
+                    for (let el of studentElements) {
+                        if (el.dataset.student === studentName) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            el.classList.add('ring-2', 'ring-blue-400', 'bg-blue-50/50');
+                            setTimeout(() => el.classList.remove('ring-2', 'ring-blue-400', 'bg-blue-50/50'), 2000);
+                            
+                            if (taskId) {
+                                const taskInput = document.getElementById(`grade-input-${taskId}`);
+                                if (taskInput) {
+                                    setTimeout(() => taskInput.focus(), 500);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }, 100);
+            }
+        };
 
         function compressImage(file) {
             return new Promise((resolve) => {
@@ -548,6 +849,10 @@
                 userProfile.classList.add('flex');
             }
             
+            // Show notification bell
+            btnNotifications.classList.remove('hidden');
+            startNotificationSync(); // Sync notifs for student
+            
             currentSubject = null;
             if (currentSubjectTitleEl) currentSubjectTitleEl.textContent = "Pilih Mapel";
             if (historySubjectNameEl) historySubjectNameEl.textContent = "";
@@ -570,10 +875,17 @@
             isTeacherMode = false;
             currentTeacherSubject = null;
             
+            if (unsubscribeNotifs) {
+                unsubscribeNotifs();
+                unsubscribeNotifs = null;
+            }
+            
             if (userProfile) {
                 userProfile.classList.add('hidden');
                 userProfile.classList.remove('flex');
             }
+            btnNotifications.classList.add('hidden');
+            notifPanel.classList.add('hidden');
             
             if (loginScreen) {
                 loginScreen.classList.remove('hidden');
@@ -686,7 +998,7 @@
                 btnSubmit.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Menyimpan...';
 
                 const tasksRef = collection(db, 'artifacts', appId, 'public', 'data', 'assignments');
-                await addDoc(tasksRef, {
+                const docRef = await addDoc(tasksRef, {
                     student: currentStudent,
                     subject: currentSubject,
                     title: title,
@@ -697,6 +1009,11 @@
                     grade: null,
                     messages: [] 
                 });
+                
+                // Send Notification to Teacher
+                const subjectObj = subjects.find(s => s.id === currentSubject);
+                const subName = subjectObj ? subjectObj.name : 'Mapel';
+                await sendNotification('Guru', 'submission', `${currentStudent} mengumpulkan tugas ${subName}: ${title}`, docRef.id, currentSubject, currentStudent);
 
                 showToast(`Tugas berhasil dikirim!`);
                 clearSelection();
@@ -731,7 +1048,7 @@
 
             history.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'bg-white p-3 md:p-4 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] mb-3';
+                card.className = 'bg-white p-3 md:p-4 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] mb-3 transition-all hover:shadow-md';
                 
                 let imagesHtml = '';
                 item.images.forEach(imgUrl => {
@@ -778,7 +1095,7 @@
                         <div class="mb-3 max-h-48 overflow-y-auto pr-2 flex flex-col space-y-1 custom-scroll">
                             ${chatHtml}
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 relative">
                             <input type="text" id="chat-input-siswa-${item.id}" placeholder="Ketik pesan ke Pak Fikry..." class="flex-grow text-xs md:text-sm border border-gray-300 bg-white rounded-full px-3 md:px-4 py-2 md:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow" onkeypress="if(event.key === 'Enter') window.sendMessage('${item.id}', '${currentStudent}')">
                             <button onclick="window.sendMessage('${item.id}', '${currentStudent}')" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white w-9 h-9 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-colors shadow-sm flex-shrink-0">
                                 <i class="fas fa-paper-plane text-[10px] md:text-xs ml-0.5 mt-0.5"></i>
@@ -813,6 +1130,27 @@
                     })
                 });
                 
+                // Find task details for notification
+                let targetStudent = null;
+                let targetSubject = null;
+                for (let student in database) {
+                    for (let subj in database[student]) {
+                        let t = database[student][subj].find(x => x.id === taskId);
+                        if (t) {
+                            targetStudent = student;
+                            targetSubject = subj;
+                            break;
+                        }
+                    }
+                    if(targetStudent) break;
+                }
+                
+                if (targetStudent && targetSubject) {
+                    const recipient = isGuru ? targetStudent : 'Guru';
+                    const subName = subjects.find(s=>s.id===targetSubject)?.name || 'Tugas';
+                    await sendNotification(recipient, 'comment', `${senderName} mengomentari tugas ${subName}`, taskId, targetSubject, targetStudent);
+                }
+
                 inputEl.value = '';
             } catch (error) {
                 console.error("Gagal kirim pesan:", error);
@@ -822,7 +1160,6 @@
             }
         };
 
-        // Fungsi AI disesuaikan dengan nama guru Fikry Akbari
         window.generateAIComment = async (studentName, subjectName, taskId) => {
             const gradeInput = document.getElementById(`grade-input-${taskId}`);
             const chatInput = document.getElementById(`chat-input-guru-${taskId}`);
@@ -875,9 +1212,9 @@
                 }
             } catch (err) {
                 console.error(err);
-                showToast('Gagal terhubung ke AI. Pastikan jenis API Key valid.', 'bg-red-500');
+                showToast('Gagal terhubung ke AI.', 'bg-red-500');
             } finally {
-                btnAI.innerHTML = '<i class="fas fa-magic text-yellow-500"></i> AI';
+                btnAI.innerHTML = '<i class="fas fa-magic text-yellow-500"></i> Buat Komentar (AI)';
                 btnAI.disabled = false;
             }
         };
@@ -895,7 +1232,7 @@
                 const percentage = Math.round((submittedStudents / students.length) * 100);
                 
                 const card = document.createElement('div');
-                card.className = 'bg-white p-4 md:p-5 rounded-2xl md:rounded-[1.5rem] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-gray-100 cursor-pointer active:scale-95 transition-transform duration-200';
+                card.className = 'bg-white p-4 md:p-5 rounded-2xl md:rounded-[1.5rem] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-gray-100 cursor-pointer active:scale-95 transition-transform duration-200 hover:shadow-md';
                 card.onclick = () => {
                     currentTeacherSubject = subject.id;
                     openTeacherDetailView(subject);
@@ -929,6 +1266,7 @@
         function openTeacherDetailView(subject) {
             if (!teacherSubjectGrid || !teacherDetailView || !teacherDetailTitle || !teacherStudentList) return;
             teacherSubjectGrid.classList.add('hidden'); 
+            dailyRecapPanel.classList.add('hidden'); // Hide daily recap in detail view
             teacherDetailView.classList.remove('hidden');
             teacherDetailView.classList.add('flex');
             
@@ -948,7 +1286,8 @@
                 const hasSubmitted = tasks.length > 0;
                 
                 const item = document.createElement('div');
-                item.className = `p-3 md:p-4 rounded-2xl border transition-all ${hasSubmitted ? 'bg-blue-50/40 border-blue-100 shadow-sm' : 'bg-gray-50 border-gray-100 opacity-75'}`;
+                item.className = `student-row p-3 md:p-4 rounded-2xl border transition-all duration-300 ${hasSubmitted ? 'bg-blue-50/40 border-blue-100 shadow-sm' : 'bg-gray-50 border-gray-100 opacity-75'}`;
+                item.dataset.student = student;
                 
                 let taskHtml = '';
                 if (hasSubmitted) {
@@ -987,21 +1326,21 @@
                                     <div class="bg-white p-2.5 rounded-xl border border-blue-100 shadow-sm flex items-center justify-between gap-2">
                                         <span class="text-xs md:text-sm font-semibold text-gray-600 flex-shrink-0 ml-1">Nilai:</span>
                                         <div class="flex items-center gap-2 flex-grow justify-end">
-                                            <input type="number" id="grade-input-${task.id}" value="${task.grade || ''}" min="0" max="100" placeholder="0-100" class="w-16 md:w-20 px-2 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base font-bold text-center shadow-inner text-blue-700 bg-gray-50">
-                                            <button onclick="window.saveGrade('${task.id}')" class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5">
+                                            <input type="number" id="grade-input-${task.id}" value="${task.grade || ''}" min="0" max="100" placeholder="0-100" class="w-16 md:w-20 px-2 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base font-bold text-center shadow-inner text-blue-700 bg-gray-50 transition-colors focus:bg-white">
+                                            <button onclick="window.saveGrade('${task.id}', '${student}', '${subject.name}', '${subject.id}')" class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5">
                                                 <i class="fas fa-check"></i> <span class="hidden md:inline">Simpan</span>
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div class="bg-white rounded-xl border border-blue-100 shadow-sm flex flex-col">
+                                    <div class="bg-white rounded-xl border border-blue-100 shadow-sm flex flex-col overflow-hidden">
                                         <div class="p-2 border-b border-gray-100 bg-gray-50 rounded-t-xl text-[10px] md:text-xs font-semibold text-gray-500">
                                             <i class="fas fa-comments text-blue-400 mr-1 ml-1"></i> Diskusi Kelas
                                         </div>
                                         <div class="p-2.5 max-h-48 overflow-y-auto flex flex-col flex-grow bg-white custom-scroll">
                                             ${chatHtml}
                                         </div>
-                                        <div class="p-2 border-t border-gray-100 bg-gray-50 rounded-b-xl flex flex-col gap-2">
+                                        <div class="p-2 border-t border-gray-100 bg-gray-50 rounded-b-xl flex flex-col gap-2 relative">
                                             <div class="flex gap-1.5">
                                                 <input type="text" id="chat-input-guru-${task.id}" placeholder="Ketik balasan guru..." class="flex-grow text-xs md:text-sm border border-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white">
                                                 <button onclick="window.sendMessage('${task.id}', 'Guru')" class="bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded-lg flex items-center justify-center transition-colors shadow-sm flex-shrink-0">
@@ -1024,7 +1363,7 @@
                 item.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2 md:gap-3">
-                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full ${hasSubmitted ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-400'} flex items-center justify-center text-[10px] md:text-sm font-bold">${index + 1}</div>
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full ${hasSubmitted ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-400'} flex items-center justify-center text-[10px] md:text-sm font-bold shadow-sm">${index + 1}</div>
                             <h4 class="font-bold text-gray-700 text-xs md:text-base">${student}</h4>
                         </div>
                         <span class="px-2 md:px-3 py-0.5 md:py-1 rounded-full text-[9px] md:text-xs font-bold uppercase tracking-wider ${hasSubmitted ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'}">
@@ -1037,7 +1376,7 @@
             });
         }
 
-        window.saveGrade = async (taskId) => {
+        window.saveGrade = async (taskId, studentName, subjectName, subjectId) => {
             const inputEl = document.getElementById(`grade-input-${taskId}`);
             if (!inputEl || !auth.currentUser) return;
             
@@ -1045,11 +1384,22 @@
             
             try {
                 const taskRef = doc(db, 'artifacts', appId, 'public', 'data', 'assignments', taskId);
+                
+                const isGraded = !isNaN(gradeVal);
                 await updateDoc(taskRef, { 
-                    grade: isNaN(gradeVal) ? null : gradeVal,
-                    status: isNaN(gradeVal) ? 'Terkirim' : 'Dinilai'
+                    grade: isGraded ? gradeVal : null,
+                    status: isGraded ? 'Dinilai' : 'Terkirim'
                 });
+                
+                if (isGraded) {
+                    await sendNotification(studentName, 'grade', `Tugas ${subjectName} kamu dinilai: ${gradeVal}`, taskId, subjectId, studentName);
+                }
+                
                 showToast('Nilai disimpan!', 'bg-green-500');
+                
+                // Visual feedback
+                inputEl.classList.add('bg-green-50', 'border-green-400');
+                setTimeout(() => inputEl.classList.remove('bg-green-50', 'border-green-400'), 1000);
             } catch (error) {
                 console.error('Error saving grade', error);
                 showToast('Gagal menyimpan nilai', 'bg-red-500');
@@ -1090,7 +1440,7 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            showToast('Berhasil download!');
+            showToast('Berhasil download CSV!');
         }
 
         window.promptDelete = (assignmentId) => {
@@ -1130,6 +1480,10 @@
             if (!toast) return;
             const msgEl = toast.querySelector('#toast-message');
             if (msgEl) msgEl.textContent = message;
+            
+            // Override background color safely if needed, otherwise stick to default
+            toast.firstElementChild.className = `backdrop-blur text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center justify-center gap-3 border border-gray-700 transition-colors ${bgColorClass}`;
+            
             toast.classList.remove('translate-y-24', 'opacity-0');
             setTimeout(() => {
                 toast.classList.add('translate-y-24', 'opacity-0');
@@ -1173,6 +1527,7 @@
             if (teacherPinInput.value === TEACHER_PASSWORD) {
                 closeTeacherModal();
                 isTeacherMode = true;
+                currentStudent = null; // Clear student context
                 
                 if (loginScreen) {
                     loginScreen.classList.add('opacity-0');
@@ -1184,6 +1539,10 @@
                     userProfile.classList.remove('hidden');
                     userProfile.classList.add('flex');
                 }
+                
+                // Show notification bell
+                btnNotifications.classList.remove('hidden');
+                startNotificationSync(); // Sync notifs for teacher
 
                 if (studentDashboard) {
                     studentDashboard.classList.add('hidden');
@@ -1194,8 +1553,9 @@
                     teacherDashboard.classList.add('flex');
                 }
 
+                renderDailyRecap();
                 renderTeacherDashboard();
-                showToast('Masuk sebagai Fikry Akbari (Guru Kelas)');
+                showToast('Masuk sebagai Fikry Akbari');
             } else {
                 teacherPinError.classList.remove('hidden');
             }
@@ -1205,7 +1565,10 @@
             if (!teacherDetailView || !teacherSubjectGrid) return;
             teacherDetailView.classList.add('hidden');
             teacherDetailView.classList.remove('flex');
+            
             teacherSubjectGrid.classList.remove('hidden');
+            if (dailyRecapPanel) dailyRecapPanel.classList.remove('hidden');
+            
             currentTeacherSubject = null;
             renderTeacherDashboard(); 
         }
@@ -1227,6 +1590,22 @@
 
             if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeDeleteModal);
             if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', executeDelete);
+            
+            // Notification Listeners
+            if (btnNotifications) {
+                btnNotifications.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notifPanel.classList.toggle('hidden');
+                });
+            }
+            if (btnReadAll) btnReadAll.addEventListener('click', markAllNotificationsRead);
+            
+            // Close notif panel when clicking outside
+            document.addEventListener('click', (e) => {
+                if (notifPanel && !notifPanel.classList.contains('hidden') && !e.target.closest('#btn-notifications')) {
+                    notifPanel.classList.add('hidden');
+                }
+            });
 
             if (dropZone) {
                 dropZone.addEventListener('dragover', (e) => {
